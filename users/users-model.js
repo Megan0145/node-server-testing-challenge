@@ -20,8 +20,7 @@ function findById(id) {
 }
 
 function remove(id) {
-  return db("users")
-    .where({ id })
+  return findById(id)
     .del();
 }
 

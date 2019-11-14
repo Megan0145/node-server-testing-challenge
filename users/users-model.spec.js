@@ -13,14 +13,11 @@ describe("Users model", () => {
       expect(users).toHaveLength(1);
     });
     test("Should only allow unique names", () => {
-      async () => {
-        try {
-          await Users.insert({ name: "Megan" });
-          await Users.insert({ name: "Megan" });
-        } catch (error) {
-          expect(error.code).toBe("SQLITE_CONSTRAINT");
-        }
-      };
+      Users.insert([{ name: "Megan" }, { name: "Megan" }])
+        .then()
+        .catch(err => {
+          expect(err.code).toEqual("SQLITE_CONSTRAINT");
+        });
     });
   });
 
@@ -30,6 +27,9 @@ describe("Users model", () => {
       expect(await Users.find()).toHaveLength(1);
       await Users.remove(1);
       expect(await Users.find()).toHaveLength(0);
+    });
+    test("Should not allow you to delete non-existent user", async () => {
+      expect(await Users.remove(3434)).toBe(0);
     });
   });
 });
