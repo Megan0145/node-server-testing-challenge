@@ -23,4 +23,13 @@ describe("Users model", () => {
       };
     });
   });
+
+  describe("Delete fn", () => {
+    test("Should delete user from db", async () => {
+      await Users.insert({ name: "Megan" });
+      expect(await Users.find()).toHaveLength(1);
+      await Users.remove(1);
+      expect(await Users.find()).toHaveLength(0);
+    });
+  });
 });
